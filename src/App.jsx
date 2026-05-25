@@ -1,26 +1,14 @@
 import { useState, useEffect, useRef } from 'react'
+import Footer from './components/Footer'
+import QuickStart from './components/QuickStart'
+import CTA from './components/CTA'
+import Tools from './components/Tools'
+import GithubIcon from './assets/svgs/GithubIcon'
+import AnchorIcon from './assets/svgs/AnchorIcon'
 
-const GITHUB_URL = 'https://github.com/Adii-tii/dockheal-ai'
+import GITHUB_URL from './url'
 
-/* ─── Icons ──────────────────────────────────────────────────────────── */
-function AnchorIcon({ size = 18 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="5" r="3" />
-      <line x1="12" y1="22" x2="12" y2="8" />
-      <path d="M5 12H2a10 10 0 0 0 20 0h-3" />
-    </svg>
-  )
-}
 
-function GithubIcon({ size = 16 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-      <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
-    </svg>
-  )
-}
 
 function ArrowUpRight({ size = 13 }) {
   return (
@@ -40,7 +28,7 @@ function ArrowRight({ size = 13 }) {
   )
 }
 
-/* ─── Product card SVG visualizations ────────────────────────────────── */
+/* ─── Product card SVG vi`sualizations ────────────────────────────────── */
 
 /** Animated ECG / heartbeat line — represents real-time monitoring */
 function MonitorViz() {
@@ -227,24 +215,7 @@ function RecoverViz() {
 }
 
 /* ─── Animated Dot Grid (CTA section) ────────────────────────────────── */
-function DotGrid() {
-  return (
-    <div className="dot-grid" aria-hidden="true">
-      {Array.from({ length: 18 * 12 }).map((_, i) => {
-        const col = i % 18
-        const row = Math.floor(i / 18)
-        const delay = ((Math.sin(col * 0.7) + Math.cos(row * 0.9) + 2) / 4) * 3.2
-        return (
-          <div
-            key={i}
-            className="dot-grid-item"
-            style={{ animationDelay: `${delay.toFixed(2)}s` }}
-          />
-        )
-      })}
-    </div>
-  )
-}
+
 
 /* ─── Feature icons ───────────────────────────────────────────────────── */
 const FEATURE_ICONS = [
@@ -879,153 +850,10 @@ export default function App() {
         </div>
       </section>
 
-      {/* ══════════════════════════════════════════
-          API & TOOLS
-      ══════════════════════════════════════════ */}
-      <section id="api" className="api-section">
-        <div className="api-inner">
-
-          {/* Tool registry */}
-          <div>
-            <span className="section-tag">MCP Tool Registry</span>
-            <h2 className="section-title" style={{ marginBottom: '12px' }}>The AI only calls what it's allowed to call</h2>
-            <p className="section-desc" style={{ marginBottom: '28px' }}>
-              Every tool is registered explicitly. Each call is parameter-whitelisted,
-              pre-audited, and sandboxed before guardrails decide whether execution is permitted.
-            </p>
-            <div>
-              {TOOLS.map((t, i) => (
-                <div key={i} className={`tool-row${t.phase === 2 ? ' dimmed' : ''}`}>
-                  <span className="tool-name">{t.name}</span>
-                  <div className="tool-meta">
-                    <span className="risk-badge" style={{
-                      color: t.riskColor, background: t.bg,
-                      border: `1px solid ${t.riskColor}40`,
-                    }}>{t.risk}</span>
-                    <span className="phase-label">Phase {t.phase}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p style={{ fontSize: '12px', color: 'var(--text-dim)', marginTop: '12px' }}>
-              Phase 2 tools are registered but hard-blocked until explicitly enabled.
-            </p>
-          </div>
-
-          {/* REST API */}
-          <div>
-            <span className="section-tag">REST API</span>
-            <h2 className="section-title" style={{ marginBottom: '12px' }}>Fully controllable via HTTP</h2>
-            <p className="section-desc" style={{ marginBottom: '28px' }}>
-              Every action the UI can perform, you can also automate. Investigate, lock,
-              unlock, or stream AI reasoning from any HTTP client.
-            </p>
-            <div className="code-block">
-              <div className="code-block-bar">API endpoints — :8000</div>
-              <div className="code-block-body">
-                {ENDPOINTS.map((ep, i) => (
-                  <div key={i} className="endpoint-row">
-                    <span className={`method ${ep.method === 'GET' ? 'method-get' : 'method-post'}`}>
-                      {ep.method}
-                    </span>
-                    <span className="endpoint-path">{ep.path}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          CTA — dot grid left + content right
-      ══════════════════════════════════════════ */}
-      <section id="get-started" className="cta-section">
-        <div className="cta-inner container">
-          <div className="cta-viz">
-            <DotGrid />
-          </div>
-          <div className="cta-content">
-            <h2 className="cta-title">
-              Get started with{' '}
-              <span className="accent">DockHeal</span>
-            </h2>
-            <div className="cta-buttons">
-              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer"
-                className="btn btn-primary" id="cta-github-btn">
-                <GithubIcon size={14} /> Download on GitHub
-              </a>
-              <a href="#how-it-works" className="btn btn-outline" id="cta-learn-btn">
-                Get a demo <ArrowUpRight size={14} />
-              </a>
-            </div>
-            <p className="cta-note">
-              Use DockHeal, the autonomous Docker healing engine, to improve every
-              step of your container incident lifecycle.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          QUICK START
-      ══════════════════════════════════════════ */}
-      <section className="getstarted-section">
-        <div className="getstarted-inner">
-          <div>
-            <span className="section-tag">Quick Start</span>
-            <h2 className="section-title" style={{ marginBottom: '12px' }}>Up and running in minutes</h2>
-            <p className="section-desc" style={{ marginBottom: '32px' }}>
-              Requires Docker, Python 3.10+, Node.js 18+, and a Mistral API key.
-              Clone the repo, activate your virtual environment, and start healing.
-            </p>
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer"
-              className="btn btn-primary" id="qs-download-btn">
-              <GithubIcon size={14} /> Clone on GitHub
-            </a>
-          </div>
-
-          <div className="code-block">
-            <div className="code-block-bar">quick start</div>
-            <div className="code-block-body">
-              <div className="c-comment"># Clone the repo</div>
-              <div><span className="c-prompt">$</span> <span className="c-text">git clone {GITHUB_URL}</span></div>
-              <div style={{ height: '8px' }} />
-              <div className="c-comment"># Backend</div>
-              <div><span className="c-prompt">$</span> <span className="c-text">cd dockheal-ai/backend</span></div>
-              <div><span className="c-prompt">$</span> <span className="c-text">python -m venv .venv &amp;&amp; .venv\Scripts\activate</span></div>
-              <div><span className="c-prompt">$</span> <span className="c-text">pip install -r requirements.txt</span></div>
-              <div><span className="c-prompt">$</span> <span className="c-text">echo "MISTRAL_API_KEY=sk-..." &gt; .env</span></div>
-              <div><span className="c-prompt">$</span> <span className="c-text">uvicorn app.main:app --reload</span></div>
-              <div style={{ height: '8px' }} />
-              <div className="c-comment"># Client</div>
-              <div><span className="c-prompt">$</span> <span className="c-text">cd ../client &amp;&amp; npm install &amp;&amp; npm run dev</span></div>
-              <div style={{ height: '8px' }} />
-              <div className="c-success">✓ DockHeal running at http://localhost:5173</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════
-          FOOTER
-      ══════════════════════════════════════════ */}
-      <footer className="footer">
-        <div className="footer-inner">
-          <div className="footer-logo">
-            <AnchorIcon size={16} />
-            DockHeal
-            <span className="footer-logo-sub">— Autonomous Docker Healing</span>
-          </div>
-          <div className="footer-links">
-            <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" className="footer-link">
-              <GithubIcon size={13} /> GitHub
-            </a>
-            <span className="footer-copy">Open Source · MIT License</span>
-          </div>
-        </div>
-      </footer>
+      <Tools TOOLS={TOOLS} ENDPOINTS={ENDPOINTS}/>
+      <CTA />
+      <QuickStart />
+      <Footer />
     </>
   )
 }
