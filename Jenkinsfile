@@ -12,9 +12,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
-                    pwd
-                    ls -la
-
                     docker compose down || true
                     docker compose up -d --build
                 '''
