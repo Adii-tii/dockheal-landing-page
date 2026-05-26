@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        IMAGE_NAME = "react-app"
-        CONTAINER_NAME = "react-app"
-    }
-
     stages {
 
         stage('Checkout') {
@@ -14,32 +9,14 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Deploy') {
             steps {
                 sh '''
-                    docker build \
-                    -t ${IMAGE_NAME}:latest .
-                '''
-            }
-        }
+                    pwd
+                    ls -la
 
-        stage('Stop Existing Container') {
-            steps {
-                sh '''
-                    docker stop ${CONTAINER_NAME} || true
-                    docker rm ${CONTAINER_NAME} || true
-                '''
-            }
-        }
-
-        stage('Deploy Container') {
-            steps {
-                sh '''
-                    docker run -d \
-                        --name ${CONTAINER_NAME} \
-                        -p 80:80 \
-                        --restart unless-stopped \
-                        ${IMAGE_NAME}:latest
+                    docker compose down || true
+                    docker compose up -d --build
                 '''
             }
         }
@@ -47,8 +24,8 @@ pipeline {
         stage('Verify Deployment') {
             steps {
                 sh '''
-                    sleep 10
                     docker ps
+                    docker compose ps
                 '''
             }
         }
