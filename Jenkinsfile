@@ -8,7 +8,6 @@ pipeline {
                 checkout scm
             }
         }
-
         stage('Deploy') {
             steps {
                 sh '''
@@ -17,7 +16,6 @@ pipeline {
                 '''
             }
         }
-
         stage('Verify Deployment') {
             steps {
                 sh '''
@@ -38,3 +36,4 @@ pipeline {
         }
     }
 }
+
